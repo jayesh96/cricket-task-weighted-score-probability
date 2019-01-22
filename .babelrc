@@ -1,0 +1,14 @@
+{
+  "presets": [
+    "es2015",
+    "flow",
+    [
+      "env", {
+        "targets": {
+          "node": "8.0"
+        }
+      }
+    ]
+  ],
+  "plugins":[ "babel-plugin-transform-object-rest-spread", "babel-plugin-transform-class-properties" ]
+}

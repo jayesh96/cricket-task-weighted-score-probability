@@ -1,0 +1,24 @@
+# Don't check auto-generated stuff into git
+coverage
+build
+.github
+node_modules
+dist
+stats.json
+flow-typed
+.vscode
+server/uploads/*
+!server/uploads/.gitkeep
+
+# exclude everything
+logs/*
+
+# # exception to the rule
+!logs/.gitkeep
+
+# Cruft
+.DS_Store
+npm-debug.log
+.idea
+tags
+.env
