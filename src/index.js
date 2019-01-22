@@ -18,14 +18,15 @@ let PLAYER_STATUS = {
   }
 };
 let PLAYER_AVAILABLE = 2;
-let TOTAL_RUNS_MADE = 0
-let TOTAl_BALLS_LEFT = NO_OF_OVERS*6; 
+let TOTAL_RUNS_MADE = 0;
+let TOTAl_BALLS_LEFT = NO_OF_OVERS * 6;
 
+// Random Number Generator between 0 to MAX
 const getRandomizer = top => {
   return Math.floor(Math.random() * top);
 };
 
-
+// CLASS cricket initialized
 class Cricket {
   constructor() {
     this.WEIGHTED_RANDOM_NO_VALUES = {}; // stores values of weighted random numbers
@@ -37,7 +38,10 @@ class Cricket {
     this.activePlayerId = "P1";
   }
 
-  weighted_random_generator = player_id => {
+  // Program to generate weighted random number using spreading technique
+  // using spread constant as 100;
+
+  weighted_random_generator = player_id => { // player id passed 
     const weighted_values = [];
     const weighted_values_index = [];
     for (var p = 0; p < 8; p++) {
@@ -49,6 +53,7 @@ class Cricket {
     return [weighted_values, weighted_values_index];
   };
 
+  
   generate_weighted_random_values = () => {
     Object.keys(PLAYER_PROBABILITY).map(player => {
       this.WEIGHTED_RANDOM_NO_VALUES[`${player}`] = {
@@ -69,13 +74,6 @@ class Cricket {
     });
   };
 
-  getNewPlayer = (activePlayer, playerOnOppositeCrease) => {
-    PLAYER_STATUS[`${activePlayer}`].status = STATUS.OUT;
-    let new_player = Object.keys(PLAYER_STATUS)[4 - PLAYER_AVAILABLE];
-
-    console.log(new_player);
-  };
-  
   getActivePlayer = () => {
     const activePlayer = Object.keys(PLAYER_STATUS).filter(player => {
       if (PLAYER_STATUS[`${player}`].status === STATUS.ACTIVE) {
@@ -113,6 +111,7 @@ class Cricket {
       PLAYER_STATUS[`${activePlayer}`].status = STATUS.OUT;
       let newPlayerId = Object.keys(PLAYER_STATUS)[4 - PLAYER_AVAILABLE];
       PLAYER_STATUS[`${newPlayerId}`].status = STATUS.ACTIVE;
+      PLAYER_AVAILABLE = PLAYER_AVAILABLE - 1;
       return [newPlayerId, playerOnOppositeCrease];
     }
     if (run_scored % 2 == 0) {
@@ -134,6 +133,9 @@ class Cricket {
   run() {
     let activePlayerId = ACTIVE_PLAYER_ID;
     for (var ballCount = 1; ballCount <= NO_OF_OVERS * 6; ballCount++) {
+      if (PLAYER_AVAILABLE <= 0) {
+        return false;
+      }
       let random_value = getRandomizer(
         this.WEIGHTED_RANDOM_NO_VALUES[`${activePlayerId}`]["value"].length
       );
@@ -141,8 +143,8 @@ class Cricket {
         "value_index"
       ][random_value];
 
-      TOTAL_RUNS_MADE = TOTAL_RUNS_MADE+run_scored;
-      TOTAl_BALLS_LEFT = NO_OF_OVERS * 6 - ballCount; 
+      TOTAL_RUNS_MADE = TOTAL_RUNS_MADE + run_scored;
+      TOTAl_BALLS_LEFT = NO_OF_OVERS * 6 - ballCount;
       let players_playing = this.checkRun(
         run_scored,
         ACTIVE_PLAYER_ID,
@@ -151,15 +153,13 @@ class Cricket {
       ACTIVE_PLAYER_ID = players_playing[0];
       if (ballCount % 6 == 0) {
         console.log("----------");
-        console.log(`NEW OVER START, ${40-TOTAL_RUNS_MADE} runs required`);
+        console.log(`NEW OVER START, ${40 - TOTAL_RUNS_MADE} runs required`);
         console.log("----------");
         ACTIVE_PLAYER_ID = this.getplayerOnOppositeCrease();
       }
-
-      if(TOTAL_RUNS_MADE > 40){
+      if (TOTAL_RUNS_MADE > 40) {
         return true;
       }
-
     }
   }
 }
@@ -167,11 +167,11 @@ class Cricket {
 const cricket = new Cricket();
 cricket.generate_weighted_random_values();
 console.log("LIVE COMMENTARY");
-if(cricket.run()){
-  console.log("RESULT---------->")
-  console.log(`INDIA WINS with ${TOTAl_BALLS_LEFT} balls left`)
-}else{
-  console.log("RESULT---------->")
-  console.log(`INDIA LOST`)
-};
-
+if (cricket.run()) {
+  console.log("RESULT---------->");
+  console.log(`INDIA WINS with ${TOTAl_BALLS_LEFT} balls left`);
+} else {
+  console.log("RESULT---------->");
+  console.log(`INDIA LOST`);
+}
+console.log(SCORECARD);
