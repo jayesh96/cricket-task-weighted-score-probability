@@ -7,6 +7,8 @@
 ###### Install all dependencies
 
 `npm install --save`
+
 ######Run Project
+
 `npm start`
 
