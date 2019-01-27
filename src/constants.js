@@ -20,7 +20,7 @@ const STATUS ={
 }
 
 const PLAYER_PROBABILITY = {
-    P1:{
+    KB:{
         name:'Kirat Bohli',
         0:0.05,
         1:0.05,
@@ -31,7 +31,7 @@ const PLAYER_PROBABILITY = {
         6:0.09,
         7:0.30 //probability of getting out
     },
-    P2:{
+    NS:{
         name:'N.S Bodhi',
         0:0.10 ,
         1:0.40,
@@ -42,7 +42,7 @@ const PLAYER_PROBABILITY = {
         6:0.04,
         7:0.10 //probability of getting out
     },
-    P3:{
+    RB:{
         name:'R Bumrah',
         0:0.20 ,
         1:0.30,
@@ -53,7 +53,7 @@ const PLAYER_PROBABILITY = {
         6:0.04,
         7:0.20 //probability of getting out
     },
-    P4:{
+    SH:{
         name:'Shashi Henra',
         0:0.30 ,
         1:0.25,
