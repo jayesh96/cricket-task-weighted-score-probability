@@ -42,7 +42,7 @@ let activePlayerID = "KB";
 let pastActivePlayerID = "";
 let playerOnOppositeCrease = "NS";
 let newPlayerID = "";
-let WEIGHTED_RANDOM_NO_VALUES = {};
+let weightedRandomNoValues = {};
 let totalRunsMade = 0;
 
 // function to get random number between 0 to MAX_VALUE
@@ -65,12 +65,12 @@ const weightedRandomNumberGenerator = player_id => {
 //generates weighted random values
 const generateWeightedRandomValues = () => {
   Object.keys(PLAYER_PROBABILITY).map(player => {
-    WEIGHTED_RANDOM_NO_VALUES[`${player}`] = {
+    weightedRandomNoValues[`${player}`] = {
       player_name: PLAYER_PROBABILITY[`${player}`][`name`],
       score: weightedRandomNumberGenerator(player)
     };
   });
-  return WEIGHTED_RANDOM_NO_VALUES;
+  return weightedRandomNoValues;
 };
 
 // removes one player if player is out
@@ -100,8 +100,8 @@ const commentary = (type, msg) => {
       log(
         chalk.blue(
           `Over is completed, Get ready for next over, Players swap there crease,`
-        ) + chalk.green(`${activePlayerID}`)
-        // chalk.blue(` will face the first ball of next over`)
+        ) + chalk.green(`${activePlayerID}`) +
+        chalk.blue(` will face the first ball of next over`)
       );
       break;
     case COMMENTARY.PLAYER_IS_OUT:
@@ -234,7 +234,7 @@ const printIndividualScore = () => {
 const start = async () => { 
   while (ballsPlayed <= maxBallsAvailable && playersAvailable >= 0 && maxRunsRequired>=totalRunsMade) {
     let randomNumber = await getRandomNumber(100);
-    let runScored = await WEIGHTED_RANDOM_NO_VALUES[`${activePlayerID}`][
+    let runScored = await weightedRandomNoValues[`${activePlayerID}`][
       "score"
     ][randomNumber];
     // console.log('Ball is thrown', ballsPlayed, "#",runScored)
