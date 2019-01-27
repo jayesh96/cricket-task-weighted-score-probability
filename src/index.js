@@ -1,5 +1,5 @@
 import { PLAYER_PROBABILITY, STATUS } from "./constants";
-const chalk = require("chalk");
+const chalk = require("chalk"); // using chalk package to display colours on console
 
 const log = console.log;
 const COMMENTARY = {
@@ -45,10 +45,12 @@ let newPlayerID = "";
 let WEIGHTED_RANDOM_NO_VALUES = {};
 let totalRunsMade = 0;
 
+// function to get random number between 0 to MAX_VALUE
 const getRandomNumber = top => {
   return Math.floor(Math.random() * top);
 };
 
+// generate a dictionary of random values based on the probability
 const weightedRandomNumberGenerator = player_id => {
   // player id passed
   const weighted_values_index = [];
@@ -60,6 +62,7 @@ const weightedRandomNumberGenerator = player_id => {
   return weighted_values_index;
 };
 
+//generates weighted random values
 const generateWeightedRandomValues = () => {
   Object.keys(PLAYER_PROBABILITY).map(player => {
     WEIGHTED_RANDOM_NO_VALUES[`${player}`] = {
@@ -70,6 +73,7 @@ const generateWeightedRandomValues = () => {
   return WEIGHTED_RANDOM_NO_VALUES;
 };
 
+// removes one player if player is out
 const removePlayer = () => {
   return new Promise((resolve, reject) => {
     playersAvailable--;
@@ -79,6 +83,7 @@ const removePlayer = () => {
   });
 };
 
+// add one player after player is removed, its swap new player id with the active player id
 const addPlayer = () => {
   return new Promise((resolve, reject) => {
     newPlayerID = Object.keys(PLAYER_STATUS)[3 - playersAvailable];
@@ -88,6 +93,7 @@ const addPlayer = () => {
   });
 };
 
+// function which generate live commentary 
 const commentary = (type, msg) => {
   switch (type) {
     case COMMENTARY.OVER_COMPLETED:
@@ -151,6 +157,9 @@ const commentary = (type, msg) => {
   }
 };
 
+// changes crease when
+// 1) player score 1/3/5
+// 2) or over is finished
 const changeCrease = msg => {
   return new Promise((resolve, reject) => {
     let temp = activePlayerID;
@@ -162,6 +171,7 @@ const changeCrease = msg => {
   });
 };
 
+// updates individual player score, balls and total balls 
 const updatePlayerScore = (playerId, runs) => {
   let initialRuns = PLAYER_STATUS[playerId]["runs"];
   let initialBallsPlayer =  PLAYER_STATUS[playerId]["balls"]; 
@@ -171,6 +181,7 @@ const updatePlayerScore = (playerId, runs) => {
 
 };
 
+// check if over is completed or not, returns a boolean value
 const isOverCompleted = ballsPlayed => {
   if (ballsPlayed % 6 === 0) {
     return true;
@@ -178,6 +189,10 @@ const isOverCompleted = ballsPlayed => {
   return false;
 };
 
+// program to check run scored and perform individual task for every run scored
+// 1) run scored is 7 -> player is out -> remove player -> active player -> commentary
+// 2) run scored is 0,2,4,6 -> no action -> commentary
+// 3) run scored is 1,3,5 -> changes crease -> commentary
 const run = runScored => {
   if (runScored === 0) {
     commentary(COMMENTARY.SCORED_0);
@@ -207,12 +222,15 @@ const run = runScored => {
   }
 };
 
+// prints individual score of each player
 const printIndividualScore = () => {
   let players = Object.keys(PLAYER_STATUS)
   players.map((player)=>{
     log(`${player} scored ${PLAYER_STATUS[player].runs} (${PLAYER_STATUS[player].balls} balls)`)
   })
 }
+
+// entery function
 const start = async () => { 
   while (ballsPlayed <= maxBallsAvailable && playersAvailable >= 0 && maxRunsRequired>=totalRunsMade) {
     let randomNumber = await getRandomNumber(100);
